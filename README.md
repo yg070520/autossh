@@ -376,3 +376,45 @@ This image has the following architectures automatically built on Docker Hub.
 - `armv6` (e.g. Raspberry Pi Zero)
 - `armv7` (e.g. Raspberry Pi 2 through 4)
 - `arm64v8` (e.g. Amazon EC2 A1 Instances)
+
+## CI / GitHub Container Registry (GHCR)
+
+This repository includes a GitHub Actions workflow that builds multi-arch images and pushes them to GitHub Container Registry (`ghcr.io`). The workflow tags images under `ghcr.io/<OWNER>/<REPO>:<tag>`.
+
+Example manual build and push (locally):
+
+```bash
+# build and tag
+docker build -f build/package/Dockerfile -t ghcr.io/<OWNER>/<REPO>:latest .
+
+# push (requires `docker login ghcr.io`)
+docker push ghcr.io/<OWNER>/<REPO>:latest
+```
+
+Using `host.docker.internal` on Linux
+
+On Linux, `host.docker.internal` may not be available by default. When running the container and you want the container to reach the Docker host via `host.docker.internal`, add the host mapping so the name resolves to the host gateway:
+
+```bash
+docker run --add-host=host.docker.internal:host-gateway \
+  -e SSH_TARGET_HOST=host.docker.internal \
+  -v /path/to/id_rsa:/id_rsa \
+  ghcr.io/<OWNER>/<REPO>:latest
+```
+
+Or in `docker-compose.yml`:
+
+```yaml
+services:
+  autossh:
+    image: ghcr.io/<OWNER>/<REPO>:latest
+    environment:
+      - SSH_TARGET_HOST=host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - /path/to/id_rsa:/id_rsa
+```
+
+If you prefer to set a static IP for the target host, set `SSH_TARGET_HOST` explicitly in your environment or compose file (e.g. `172.17.0.1`).
+

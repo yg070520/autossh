@@ -41,6 +41,5 @@ ENV \
   VERSION="${VERSION}"
 
 ADD rootfs/entrypoint.sh /entrypoint.sh
-ADD rootfs/version.sh /version.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
