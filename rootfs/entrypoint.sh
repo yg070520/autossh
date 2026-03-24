@@ -14,8 +14,8 @@ echo "[INFO ] Tunneling ${SSH_BIND_IP:=127.0.0.1}:${SSH_TUNNEL_PORT:=${DEFAULT_P
 COMMAND="autossh \
      -M 0 \
      -N  \
-     -o StrictHostKeyChecking= no \
-     -o ServerAliveInterval= 10 \
+     -o StrictHostKeyChecking=no \
+     -o ServerAliveInterval=10 \
      -o ServerAliveCountMax=3 \
      -o ExitOnForwardFailure=yes \
      -R ${SUBDOMAIN}:${SSH_TARGET_PORT}:localhost:${SSH_TARGET_PORT} \
