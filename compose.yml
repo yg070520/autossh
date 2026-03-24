@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  ssh-to-docker-host:
+    image: ghcr.io/yg070520/autossh:latest
+    container_name: auto-subdomain
+    environment:
+      - SSH_TARGET_PORT=2053
+      - SUBDOMAIN=xxx
+      #- SSH_TARGET_HOST=host.docker.internal  
+    restart: always
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
